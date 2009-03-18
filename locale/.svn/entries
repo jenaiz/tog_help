@@ -1,0 +1,42 @@
+8
+
+dir
+705
+https://svn.larnaby.net/repos/anetcom/trunk/vendor/plugins/tog_help/locale
+https://svn.larnaby.net/repos/anetcom
+
+
+
+2009-03-17T15:55:07.749624Z
+704
+jenaiz
+
+
+svn:special svn:externals svn:needs-lock
+
+tog_help.yml
+file
+
+
+
+
+2009-03-13T08:25:22.000000Z
+7cffbde9ed61b22cab0a8378fabf86eb
+2009-03-17T15:55:07.749624Z
+704
+jenaiz
+has-props
+
+tog_help_es.yml
+file
+
+
+
+
+2009-03-13T08:21:45.000000Z
+55626a72495901690c6b35d696e0bc0f
+2009-03-17T15:55:07.749624Z
+704
+jenaiz
+has-props
+
