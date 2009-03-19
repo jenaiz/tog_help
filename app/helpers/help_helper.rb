@@ -1,7 +1,6 @@
 module HelpHelper
 
   def link_to_help
-    debugger
     locale = I18n.default_locale || Tog::Config["plugins.tog_core.language.default"]
     
     page = locale + '/' + controller.controller_path + '/' + controller.action_name
