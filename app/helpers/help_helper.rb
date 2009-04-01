@@ -1,8 +1,8 @@
 module HelpHelper
 
   def link_to_help
+
     locale = (I18n.default_locale || Tog::Config["plugins.tog_core.language.default"]).to_s
-    
     page = locale + '/' + controller.controller_path + '/' + controller.action_name
     
     create_tree(page)
@@ -32,13 +32,9 @@ module HelpHelper
   def page_from_parent(title, page, parent)
     father = Page.find_by_slug(parent)
     
-    new_page = Page.new
-    new_page.title = title
-    new_page.slug = page
-    new_page.breadcrumb = page
-    new_page.content = page
-    new_page.parent = father
-    new_page.state = "published"
+    new_page = Page.new(:title => title, :slug => page, :breadcrumb => page, 
+                        :content => page, :parent => father, :state => "published")
+
     new_page.save!
   end
       
