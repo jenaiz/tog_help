@@ -1,6 +1,6 @@
 module HelpHelper
 
-  def link_to_help
+  def link_to_help(style="help")
 
     locale = (I18n.default_locale || Tog::Config["plugins.tog_core.language.default"]).to_s
     page = locale + '/' + controller.controller_path + '/' + controller.action_name
@@ -11,7 +11,7 @@ module HelpHelper
     # when run from selenium tests the init.rb of tog_help does not seem to be run
     # and thus Tog::Config["plugins.tog_help.initial_path"] is not set
     initial_path = Tog::Config["plugins.tog_help.initial_path"] || "inicio/help/"
-    link_to(I18n.t("tog_help.help"), cms_connect_path(initial_path + link_page))
+    link_to(I18n.t("tog_help.help"), cms_connect_path(initial_path + link_page), :class => style)
   end 
   
   def create_tree(route)

@@ -62,17 +62,24 @@ You only have to put a link in your views and you automaticaly will have a new C
 <%= link_to_help %>
 </pre>
 
-for example, if you visit the /home/index the new page will be in:
+This way use by default: <em>class="help"</em>, if you want to change it, you only have to pass it like a param:
+
+<pre>
+<%= link_to_help("other_style") %>
+</pre>
+
+For example, if you visit the /home/index the new page will be in:
 
 <pre>
   /cms/inicio/help/{locale}/home/es_home_index  
 </pre>
 
-By default the plugin has to propeties:
+By default the plugin has the propeties:
 
 <pre>
-Tog::Config["plugins.tog_help.initial_path"]
+Tog::Config["plugins.tog_help.initial_path"] => "inicio/help/"
 </pre> 
 
+You can change it to your personal path.
 
 Copyright (c) 2009 , released under the MIT license
