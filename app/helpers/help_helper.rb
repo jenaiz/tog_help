@@ -8,7 +8,10 @@ module HelpHelper
     create_tree(page)
     link_page = locale + '/' + controller.controller_path + '/' + page.gsub('/', '_')
     
-    link_to(I18n.t("tog_help.help"), cms_connect_path(Tog::Config["plugins.tog_help.initial_path"] + link_page)) 
+    # when run from selenium tests the init.rb of tog_help does not seem to be run
+    # and thus Tog::Config["plugins.tog_help.initial_path"] is not set
+    initial_path = Tog::Config["plugins.tog_help.initial_path"] || "inicio/help/"
+    link_to(I18n.t("tog_help.help"), cms_connect_path(initial_path + link_page))
   end 
   
   def create_tree(route)
