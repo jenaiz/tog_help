@@ -7,6 +7,5 @@ es:
     
     notifier:
       mailer:
-        hi: "Hola admin,"
         text: "Una nueva página de ayuda ha sido creada, te recomendamos visitarla y editarla:"
         bye: "Un saludo,"
