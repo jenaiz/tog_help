@@ -21,6 +21,7 @@ module HelpHelper
   end 
   
   def create_tree(route, link_page)
+    debugger
     route_z = route.gsub('/', '_')
     routes = route.split('/').reject(&:empty?)
     page = Page.find_by_slug(route_z)
@@ -31,7 +32,8 @@ module HelpHelper
       tree.each_index do |index|
         dir = Page.find(:first, :conditions => {:slug => tree[index], :parent_id => parent})   
         if dir == nil && (tree.last != tree[index])
-          parent = page_from_parent(tree[index], tree[index], parent.slug)
+          slug = parent ? parent.slug : nil
+          parent = page_from_parent(tree[index], tree[index], slug)
         elsif dir == nil && (tree.last == tree[index])
           parent = page_from_parent(tree[index], route_z, parent.slug)
         end
