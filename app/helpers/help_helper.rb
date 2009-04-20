@@ -21,7 +21,6 @@ module HelpHelper
   end 
   
   def create_tree(route, link_page)
-    debugger
     route_z = route.gsub('/', '_')
     routes = route.split('/').reject(&:empty?)
     page = Page.find_by_slug(route_z)
