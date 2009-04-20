@@ -9,7 +9,7 @@ module HelpHelper
     
     if cmspage.nil?
       link_page = initial_path + locale + '/' + controller.controller_path + '/' + page.gsub('/', '_')
-      create_tree(page, cms_connect_path(link_page))      
+      create_tree(link_page, cms_connect_path(link_page))      
     else
       link_page = initial_path + locale + '/' + cmspage
     end
