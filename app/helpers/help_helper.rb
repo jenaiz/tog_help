@@ -5,11 +5,12 @@ module HelpHelper
     locale = (I18n.default_locale || Tog::Config["plugins.tog_core.language.default"]).to_s
     initial_path = Tog::Config["plugins.tog_help.initial_path"] || "help"    
     initial_path = initial_path + '/' unless initial_path.ends_with?('/') 
-    page = initial_path + controller.controller_path + '/' + controller.action_name
-    
+    page = controller.controller_path + '/' + controller.action_name
+
+    link_page = ''
     if cmspage.nil?
       link_page = initial_path + locale + '/' + controller.controller_path + '/' + page.gsub('/', '_')
-      create_tree(link_page, cms_connect_path(link_page))      
+      create_tree(link_page)      
     else
       link_page = initial_path + locale + '/' + cmspage
     end
@@ -19,21 +20,21 @@ module HelpHelper
     link_to(name, cms_connect_path(link_page), options)
   end 
   
-  def create_tree(route, link_page)
+  def create_tree(route)
     route_z = route.gsub('/', '_')
     routes = route.split('/').reject(&:empty?)
     page = Page.find_by_slug(route_z)
     
     if page == nil
-      routes.each_index do |index|
-
-        dir = Page.find_by_slug(routes[index])
-        if dir == nil && !(routes.last == routes[index])
-          parent = (routes[index] == routes.first ? 'help' : routes[index - 1])
-          page_from_parent(routes[index], routes[index], parent)
-        elsif dir == nil && (routes.last == routes[index])
-          page_from_parent(routes[index], route_z, routes[index - 1])
-        end      
+      parent = Page.find(:first, :conditions => {:slug => routes.first, :parent_id => nil}) 
+      tree = routes[1, routes.length]
+      tree.each_index do |index|
+        dir = Page.find(:first, :conditions => {:slug => tree[index], :parent_id => parent})   
+        if dir == nil && (tree.last != tree[index])
+          parent = page_from_parent(tree[index], tree[index], parent.slug)
+        elsif dir == nil && (tree.last == tree[index])
+          parent = page_from_parent(tree[index], route_z, parent.slug)
+        end
       end
       send_internal_message(request.protocol + request.host_with_port + link_page)
     end
@@ -45,7 +46,8 @@ module HelpHelper
     new_page = Page.new(:title => title, :slug => page, :breadcrumb => page, 
                         :content => page, :parent => father, :state => "published")
 
-    new_page.save!
+    new_page.save!    
+    return new_page       
   end
   
   def send_internal_message(page_url)
