@@ -1,7 +1,8 @@
 class CreateHelpPage < ActiveRecord::Migration
   def self.up
-    home = Page.find(:first)
-    
+
+    home = Page.find_by_parent_id(nil)
+
     page = Page.new
     page.title = 'Help'
     page.slug = 'help'

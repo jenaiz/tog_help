@@ -56,22 +56,36 @@ end
 rake db:migrate
 </pre> 
 
-You only have to put a link in your views and you automaticaly will have a new CMS page with the name:
+You only have to put a link in your views and you automaticaly will have a new CMS page with the name.:
 
 <pre>
 <%= link_to_help %>
-</pre>
-
-This way use by default: <em>class="help"</em>, if you want to change it, you only have to pass it like a param:
-
-<pre>
-<%= link_to_help("other_style") %>
 </pre>
 
 For example, if you visit the /home/index the new page will be in:
 
 <pre>
   /cms/inicio/help/{locale}/home/es_home_index  
+</pre>
+
+Other examples of use:
+
+<pre>
+  link_to_help(cmspage, name, options = {})
+</pre>
+
+The helper define the params:
+
+* cmspage: if it isn't nil, the link go to this cms page.
+* name: if you don't want to use the text by default: I18n.t("tog_help.help"), you can use your own text.
+* options: They are html_options like: class, etc.
+
+<pre>
+<%= link_to_help('my_own_page', 'help') %>
+</pre>
+
+<pre>
+<%= link_to_help('') %>
 </pre>
 
 By default the plugin has the propeties:

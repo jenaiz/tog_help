@@ -1,4 +1,5 @@
 require_plugin 'tog_vault'
+require_plugin 'tog_mail'
 
 require "i18n" unless defined?(I18n)
 Dir[File.dirname(__FILE__) + '/locale/**/*.yml'].each do |file|

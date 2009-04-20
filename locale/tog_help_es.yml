@@ -1,3 +1,12 @@
 es:
   tog_help:
+    helpers:
+      help_helper:
+        subject: Nueva página de ayuda creada
     help: Ayuda
+    
+    notifier:
+      mailer:
+        hi: "Hola admin,"
+        text: "Una nueva página de ayuda ha sido creada, te recomendamos visitarla y editarla:"
+        bye: "Un saludo,"
