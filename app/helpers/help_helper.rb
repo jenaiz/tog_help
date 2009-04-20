@@ -10,7 +10,7 @@ module HelpHelper
     link_page = ''
     if cmspage.nil?
       link_page = initial_path + locale + '/' + controller.controller_path + '/' + page.gsub('/', '_')
-      create_tree(link_page)      
+      create_tree(link_page, cms_connect_path(link_page))      
     else
       link_page = initial_path + locale + '/' + cmspage
     end
@@ -20,7 +20,7 @@ module HelpHelper
     link_to(name, cms_connect_path(link_page), options)
   end 
   
-  def create_tree(route)
+  def create_tree(route, link_page)
     route_z = route.gsub('/', '_')
     routes = route.split('/').reject(&:empty?)
     page = Page.find_by_slug(route_z)
