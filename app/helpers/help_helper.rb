@@ -1,7 +1,6 @@
 module HelpHelper
 
   def link_to_help(cmspage=nil, name=I18n.t("tog_help.help"), options = {})
-
     locale = (I18n.default_locale || Tog::Config["plugins.tog_core.language.default"]).to_s
     initial_path = Tog::Config["plugins.tog_help.initial_path"] || "help"    
     initial_path = initial_path + '/' unless initial_path.ends_with?('/')     
@@ -25,7 +24,6 @@ module HelpHelper
     route_z = route.gsub('/', '_')
     routes = route.split('/').reject(&:empty?)
     page = Page.find_by_slug(route_z)
-
     if page == nil
       parent = Page.find(:first, :conditions => {:slug => routes.first, :parent_id => nil})
       if !parent
@@ -35,10 +33,11 @@ module HelpHelper
       tree.each_index do |index|
         dir = Page.find(:first, :conditions => {:slug => tree[index], :parent_id => parent})   
         if dir == nil && (tree.last != tree[index])
-          slug = parent ? parent.slug : nil
-          parent = page_from_parent(tree[index], tree[index], slug)
+          parent = page_from_parent(tree[index], tree[index], parent)
         elsif dir == nil && (tree.last == tree[index])
-          parent = page_from_parent(tree[index], route_z, parent.slug)
+          parent = page_from_parent(tree[index], route_z, parent)
+        elsif dir != nil
+          parent = dir
         end
       end
       send_internal_message(request.protocol + request.host_with_port + link_page)
@@ -46,12 +45,10 @@ module HelpHelper
   end
   
   def page_from_parent(title, page, parent)
-    father = Page.find_by_slug(parent)
-    
     new_page = Page.new(:title => title, :slug => page, :breadcrumb => page, 
-                        :content => page, :parent => father, :state => "published")
-
+                        :content => page, :parent => parent, :state => "published")
     new_page.save!    
+
     return new_page       
   end
   
