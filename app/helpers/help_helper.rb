@@ -25,7 +25,7 @@ module HelpHelper
     route_z = route.gsub('/', '_')
     routes = route.split('/').reject(&:empty?)
     page = Page.find_by_slug(route_z)
-    
+
     if page == nil
       parent = Page.find(:first, :conditions => {:slug => routes.first, :parent_id => nil})
       if !parent
@@ -56,11 +56,11 @@ module HelpHelper
   end
   
   def send_internal_message(page_url)
-    users = User.find(:all, :conditions => {:admin => true, :state => 'active'})
-   
+    users = User.find(:all, :conditions => {:admin => true, :state => 'active'}, :order => 'created_at desc')
+    
     users.each do |user|
       @message = Message.new(
-          :from => current_user,
+          :from => users.first,
           :to => user,
           :subject => Tog::Config["plugins.tog_core.mail.default_subject"] + I18n.t("tog_help.helpers.help_helper.subject"),      
           :content => '<br/>' + I18n.t("tog_help.notifier.mailer.text") + '<br/>' +
@@ -68,6 +68,6 @@ module HelpHelper
                       I18n.t("tog_help.notifier.mailer.bye") 
       )
       @message.dispatch!
-    end
+    end  
   end
 end
