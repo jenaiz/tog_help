@@ -4,7 +4,7 @@ module HelpHelper
     locale = (I18n.default_locale || Tog::Config["plugins.tog_core.language.default"]).to_s
     initial_path = Tog::Config["plugins.tog_help.initial_path"] || "help"    
     initial_path = initial_path + '/' unless initial_path.ends_with?('/')     
-    page = controller.controller_path + '/' + controller.action_name
+    page = locale + '/' + controller.controller_path + '/' + controller.action_name
 
     link_page = ''
     if cmspage.nil?
@@ -25,12 +25,12 @@ module HelpHelper
     route.slice!(0) if route.starts_with?('/')
     routes = route.split('/').reject(&:empty?)
                              
-    slug = locale + '_' + routes.last
+    slug = routes.last
     page = Page.find_by_slug(slug)
     if page == nil
       parent = Page.find(:first, :conditions => {:slug => routes.first, :parent_id => nil})
       if !parent
-        parent = page_from_parent(routes.first, routes.first, routes.first) 
+        parent = page_from_parent(routes.first, routes.first, nil) 
       end
       tree = routes[1, routes.length]
       tree.each_index do |index|
