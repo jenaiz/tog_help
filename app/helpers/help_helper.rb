@@ -8,8 +8,9 @@ module HelpHelper
 
     link_page = ''
     if cmspage.nil?
-      link_page = initial_path + locale + '/' + controller.controller_path + '/' + page.gsub('/', '_')
-      create_tree(link_page, cms_connect_path(link_page))      
+      page = '/' + controller.controller_path + '/' + page.gsub('/', '_')
+      link_page = initial_path + locale + page
+      create_tree(initial_path, locale, page, cms_connect_path(link_page))      
     else
       link_page = initial_path + locale + '/' + cmspage
     end
@@ -19,11 +20,13 @@ module HelpHelper
     link_to(name, cms_connect_path(link_page), options)
   end 
   
-  def create_tree(route, link_page)
+  def create_tree(initial_path, locale, page, link_page)
+    route = initial_path + locale + page
     route.slice!(0) if route.starts_with?('/')
-    route_z = route.gsub('/', '_')
     routes = route.split('/').reject(&:empty?)
-    page = Page.find_by_slug(route_z)
+                             
+    slug = locale + '_' + routes.last
+    page = Page.find_by_slug(slug)
     if page == nil
       parent = Page.find(:first, :conditions => {:slug => routes.first, :parent_id => nil})
       if !parent
@@ -35,7 +38,7 @@ module HelpHelper
         if dir == nil && (tree.last != tree[index])
           parent = page_from_parent(tree[index], tree[index], parent)
         elsif dir == nil && (tree.last == tree[index])
-          parent = page_from_parent(tree[index], route_z, parent)
+          parent = page_from_parent(tree[index], slug, parent)
         elsif dir != nil
           parent = dir
         end
