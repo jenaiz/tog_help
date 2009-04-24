@@ -8,4 +8,5 @@ es:
     notifier:
       mailer:
         text: "Una nueva página de ayuda ha sido creada, te recomendamos visitarla y editarla:"
+        edit: Editar
         bye: "Un saludo,"

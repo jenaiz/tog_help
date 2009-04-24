@@ -1,3 +1,12 @@
 en:
   tog_help:
+    helpers:
+      help_helper:
+        subject: New help page created
     help: Help
+    
+    notifier:
+      mailer:
+        text: "A new help page has been created, you should edit it:"
+        edit: Edit
+        bye: "Regards,"
