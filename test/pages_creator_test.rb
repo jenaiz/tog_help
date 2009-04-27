@@ -1,23 +1,24 @@
 require File.dirname(__FILE__) + '/test_helper'
 
-# Mock link_to
-module TogHelp
-  module PagesCreator
-    def cms_connect_url(*args)
-      "cms_connect_url: #{args}"
-    end
-    def cms_page_edit_url(*args)
-      "cms_page_edit_url: #{args}"
-    end
+# Mock *url methods used by internal message
+TogHelp::PagesCreator.module_eval do 
+  def cms_connect_url(*args)
+    "cms_connect_url: #{args}"
+  end
+  def cms_page_edit_url(*args)
+    "cms_page_edit_url: #{args}"
   end
 end
 
-module TogHelp
-  class PagesCreatorTest < Test::Unit::TestCase
-    include TogHelp::PagesCreator
-   
-    should "check if a path is a help path" do
+class PagesCreatorTest < Test::Unit::TestCase
+  include TogHelp::PagesCreator
+ 
+  context "Help initial path: /help" do
+    def setup
       Tog::Config["plugins.tog_help.initial_path"] = "/help"
+    end
+  
+    should "check if a path is a help path" do
       assert is_a_help_page_path?(["help", "path1"])       
       assert is_a_help_page_path?(["help", "path1", "path2"])
       assert !is_a_help_page_path?(["path1", "help", "path2"])
@@ -33,29 +34,25 @@ module TogHelp
         Page.delete_all
       end
           
-      should "get non-existing help page notifying admins" do
+      should "get non existing help page notifying admins" do
         Message.any_instance.expects(:dispatch!).twice
-        path = get_help_path(["home", "help", "en", "page1", "page2"])
-        page = create_tree(path.split("/"))
-        assert_equal "help/es/home/help/en/page1/page2/", page.url
+        page = create_help_tree(["help", "en", "page1", "page2"])
+        assert_equal "help/en/page1/page2/", page.url
         assert_equal 'published', page.state
       end
       
       context 'existing help page' do
         setup do
-          path = get_help_path(["home", "help", "en", "page1", "page2"])
-          @page = create_tree(path.split("/"))        
+          @page = create_help_tree(["help", "en", "page1", "page2"])
         end 
         should "get existing help page (without notifying admins)" do
           Message.any_instance.expects(:dispatch!).never
-          path = get_help_path(["home", "help", "en", "page1", "page2"])
-          page = create_tree(path.split("/"))
+          page = create_help_tree(["help", "en", "page1", "page2"])
           assert_equal @page, page
-          assert_equal "help/es/home/help/en/page1/page2/", page.url
+          assert_equal "help/en/page1/page2/", page.url
           assert_equal 'published', page.state
         end
       end
-
     end
   end
 end

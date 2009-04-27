@@ -7,7 +7,7 @@ class Vault::SiteController < ApplicationController
   def create_help_page
     url = params[:url]
     url = url.split("/") unless url.is_a?(Array)
-    create_tree(url) if is_a_help_page_path?(url)
+    create_help_tree(url) if is_a_help_page_path?(url)
   end
   
 end
