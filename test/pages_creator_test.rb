@@ -15,7 +15,14 @@ end
 module TogHelp
   class PagesCreatorTest < Test::Unit::TestCase
     include TogHelp::PagesCreator
-          
+   
+    should "check if a path is a help path" do
+      Tog::Config["plugins.tog_help.initial_path"] = "/help"
+      assert is_a_help_page_path?(["help", "path1"])       
+      assert is_a_help_page_path?(["help", "path1", "path2"])
+      assert !is_a_help_page_path?(["path1", "help", "path2"])
+    end
+    
     context '2 active admin users' do
       setup do
         admin1 = Factory(:user, :login => 'admin1', :admin => true)

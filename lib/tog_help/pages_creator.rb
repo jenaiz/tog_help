@@ -11,11 +11,10 @@ module TogHelp
     #
     # Return URL string
     #
-    def get_help_path(cmspage, default_initial_path = "home/help")
+    def get_help_path(cmspage)
       locale = (I18n.default_locale || 
                 Tog::Config["plugins.tog_core.language.default"]).to_s
-      initial_path = Tog::Config["plugins.tog_help.initial_path"] || 
-                     default_initial_path
+      initial_path = get_initial_help_path
       arypath = if cmspage
         [initial_path, locale, cmspage]
       else
@@ -24,6 +23,19 @@ module TogHelp
       #create_tree(arypath)
     end
     
+    # Return initial path for help pages (home/help by default)
+    #
+    def get_initial_help_path
+      Tog::Config["plugins.tog_help.initial_path"] || "home/help"
+    end
+    
+    # Return true if string path seems a help page path
+    #
+    def is_a_help_page_path?(path_ary)
+      help_path = get_initial_help_path.split("/").reject(&:empty?)
+      path_ary.first(help_path.size) == help_path
+    end
+
     # Create pages tree given the path array or return existing one. 
     # Create all needed intermediate pages using the slug as 
     # default title, breadcrumb and content.
