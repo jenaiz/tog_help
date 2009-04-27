@@ -3,9 +3,6 @@ require File.dirname(__FILE__) + '/test_helper'
 # Mock link_to
 module TogHelp
   module PagesCreator
-    def link_to(*args)
-      "link_to: #{args}"
-    end  
     def cms_connect_url(*args)
       "cms_connect_url: #{args}"
     end
@@ -31,18 +28,21 @@ module TogHelp
           
       should "get non-existing help page notifying admins" do
         Message.any_instance.expects(:dispatch!).twice
-        page = get_help_page(["home", "help", "en", "page1", "page2"])
+        path = get_help_path(["home", "help", "en", "page1", "page2"])
+        page = create_tree(path.split("/"))
         assert_equal "help/es/home/help/en/page1/page2/", page.url
         assert_equal 'published', page.state
       end
       
       context 'existing help page' do
         setup do
-          @page = get_help_page(["home", "help", "en", "page1", "page2"])        
+          path = get_help_path(["home", "help", "en", "page1", "page2"])
+          @page = create_tree(path.split("/"))        
         end 
         should "get existing help page (without notifying admins)" do
           Message.any_instance.expects(:dispatch!).never
-          page = get_help_page(["home", "help", "en", "page1", "page2"])
+          path = get_help_path(["home", "help", "en", "page1", "page2"])
+          page = create_tree(path.split("/"))
           assert_equal @page, page
           assert_equal "help/es/home/help/en/page1/page2/", page.url
           assert_equal 'published', page.state

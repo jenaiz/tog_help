@@ -1,12 +1,17 @@
 module TogHelp
   module PagesCreator
-  
+
+    include ActionView::Helpers::UrlHelper
+    include ActionView::Helpers::TagHelper
+      
     protected
     
-    # Get a help page from current controller/action names (
+    # Get a help page from current controller/action names 
     # Use argument cmspage to override
     #
-    def get_help_page(cmspage, default_initial_path = "home/help")
+    # Return URL string
+    #
+    def get_help_path(cmspage, default_initial_path = "home/help")
       locale = (I18n.default_locale || 
                 Tog::Config["plugins.tog_core.language.default"]).to_s
       initial_path = Tog::Config["plugins.tog_help.initial_path"] || 
@@ -15,19 +20,21 @@ module TogHelp
         [initial_path, locale, cmspage]
       else
         [initial_path, locale, controller.controller_path, controller.action_name]
-      end.map { |s| s.split("/") }.flatten
-      create_tree(arypath)
+      end.map { |s| s.split("/") }.flatten.join("/")
+      #create_tree(arypath)
     end
     
-    # Create pages tree for a path array. Create all needed intermediate
-    # pages using the slug as default title, breadcrumb and content.
+    # Create pages tree given the path array or return existing one. 
+    # Create all needed intermediate pages using the slug as 
+    # default title, breadcrumb and content.
     #
     # Return last page
     #
     def create_tree(arypath)    
-      # Page#find_by_url raises an exception if not found
+      # Page#find_by_url raises an exception when page not found
       begin    
-        return Page.find_by_url(arypath.join("/"))
+        page = Page.find_by_url(arypath.join("/"))
+        return page if page
       rescue
       end    
       last_page = arypath.inject(nil) do |parent, slug|
@@ -57,8 +64,7 @@ module TogHelp
         message = Message.new(
           :from => admin_users.first,
           :to => user,
-          :subject => Tog::Config["plugins.tog_core.mail.default_subject"] + 
-                      I18n.t("tog_help.helpers.help_helper.subject"),      
+          :subject => I18n.t("tog_help.helpers.help_helper.subject"),      
           :content => '<br/>' + I18n.t("tog_help.notifier.mailer.text") + '<br/>' +
                       "%s (%s)" % [
                         link_to(cms_connect_url(page.url), cms_connect_url(page.url)),
@@ -67,7 +73,7 @@ module TogHelp
                       '<br/>' +
                       I18n.t("tog_help.notifier.mailer.bye")
         )
-        message.dispatch!
+        message.dispatch!        
       end  
     end
   end  
