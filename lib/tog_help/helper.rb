@@ -1,5 +1,7 @@
 module TogHelp
   module Helper
+    
+    protected
           
     # Get a help page from current controller/action names 
     # Use argument cmspage to override

@@ -3,7 +3,9 @@ module TogHelp
     include ActionView::Helpers::UrlHelper
     include ActionView::Helpers::TagHelper
     include TogHelp::Helper
-     
+
+    protected
+         
     # Create pages tree given the path array or return existing one. 
     # Create all needed intermediate pages using the slug as 
     # default title, breadcrumb and content.
