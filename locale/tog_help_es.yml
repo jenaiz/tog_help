@@ -1,9 +1,11 @@
 es:
   tog_help:
+    help: Ayuda
+    help_not_found: No se ha encontrado página de ayuda
+    
     helpers:
       help_helper:
         subject: Nueva página de ayuda creada
-    help: Ayuda
     
     notifier:
       mailer:

@@ -16,8 +16,8 @@ Plugin requirements
 You need to install another tog platform plugin:
 In case you haven't installed any of them previously you'll need the following plugins:
 
-
 * [tog\_vault](http://github.com/tog/tog_vault/blob/master/README.markdown)
+* [facebox_render](http://github.com/ihower/facebox_render/)
 
 Follow each link above for a short installation guide incase you have to install them.			
 

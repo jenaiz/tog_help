@@ -1,9 +1,11 @@
 en:
   tog_help:
+    help: Help
+    help_not_found: Help page not found
+    
     helpers:
       help_helper:
         subject: New help page created
-    help: Help
     
     notifier:
       mailer:
