@@ -8,16 +8,6 @@ module HelpHelper
     link_to(name, path, options)
   end 
 
-  # Return facebox link to a help page
-  def facebox_link_to_help(cmspage=nil, name=I18n.t("tog_help.help"), html_options = {})  
-    facebox = render(:partial => 'shared/facebox')
-    link = facebox_link_to(name, 
-      :url => help_page_path(cmspage), 
-      :method => :get,
-      :html => html_options)
-    facebox + link    
-  end
-
   # Return URL to a help page
   # 
   def help_page_path(cmspage=nil)

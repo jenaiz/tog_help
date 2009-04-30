@@ -1,11 +1,13 @@
 Tog Help
 ========
 
-A plugin to manage help for applications.
+A plugin to manage help pages for applications.
 
 == Included functionality
 
 * Link to the help page.
+* Url to the help page
+* Automatic help page tree creation (with notification to admins)
 
 Resources
 =========
@@ -17,7 +19,6 @@ You need to install another tog platform plugin:
 In case you haven't installed any of them previously you'll need the following plugins:
 
 * [tog\_vault](http://github.com/tog/tog_vault/blob/master/README.markdown)
-* [facebox_render](http://github.com/ihower/facebox_render/)
 
 Follow each link above for a short installation guide incase you have to install them.			
 
@@ -41,7 +42,7 @@ with the following content:
 <pre>
 class InstallTogHelp < ActiveRecord::Migration
   def self.up
-    migrate_plugin "tog_help", 1
+    migrate_plugin "tog_help", 2
   end
 
   def self.down
