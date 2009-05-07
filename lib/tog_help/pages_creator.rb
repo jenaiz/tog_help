@@ -1,7 +1,5 @@
 module TogHelp
   module PagesCreator
-    include ActionView::Helpers::UrlHelper
-    include ActionView::Helpers::TagHelper
     include TogHelp::Helper
 
     protected
@@ -42,6 +40,8 @@ module TogHelp
     def send_internal_message(page)
       admin_users = User.find_all_by_admin_and_state(true, 'active', 
         :order => 'created_at desc')
+      page_url = cms_connect_url(page.url)
+      edit_url = cms_page_edit_url(page)
       admin_users.each do |user|
         message = Message.new(
           :from => admin_users.first,
@@ -49,8 +49,8 @@ module TogHelp
           :subject => I18n.t("tog_help.helpers.help_helper.subject"),      
           :content => '<br/>' + I18n.t("tog_help.notifier.mailer.text") + '<br/>' +
                       "%s (%s)" % [
-                        link_to(cms_connect_url(page.url), cms_connect_url(page.url)),
-                        link_to(I18n.t("tog_help.notifier.mailer.edit"), cms_page_edit_url(page))
+                        "<a href=\"#{page_url}\">#{page_url}</a>", 
+                        "<a href=\"#{edit_url}\">#{I18n.t("tog_help.notifier.mailer.edit")}</a>",
                       ] + 
                       '<br/>' +
                       I18n.t("tog_help.notifier.mailer.bye")
