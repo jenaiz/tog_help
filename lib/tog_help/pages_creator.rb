@@ -1,3 +1,4 @@
+
 module TogHelp
   module PagesCreator
     include TogHelp::Helper
@@ -8,7 +9,7 @@ module TogHelp
     # Create all needed intermediate pages using the slug as 
     # default title, breadcrumb and content.
     #
-    # Return last page
+    # Return last created page
     #
     def create_help_tree(arypath)    
       # Page#find_by_url raises an exception when page not found
@@ -40,7 +41,7 @@ module TogHelp
     def send_internal_message(page)
       admin_users = User.find_all_by_admin_and_state(true, 'active', 
         :order => 'created_at desc')
-      page_url = cms_connect_url(page.url)
+      page_url = cms_connect_url(page.url.split("/"))
       edit_url = cms_page_edit_url(page)
       admin_users.each do |user|
         message = Message.new(
