@@ -9,7 +9,7 @@ module TogHelp
     # Return path to help page
     #
     def get_help_path(cmspage)
-      locale = (I18n.default_locale || 
+      locale = (I18n.locale ||  
                 Tog::Config["plugins.tog_core.language.default"]).to_s
       initial_path = get_initial_help_path
       path = if cmspage
